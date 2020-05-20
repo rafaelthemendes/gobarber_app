@@ -23,6 +23,7 @@ export const ForgotPasswordText = styled.Text`
   font-size: 16px;
   font-family: RobotoSlab-Regular;
 `;
+
 export const CreateAccountButton = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
