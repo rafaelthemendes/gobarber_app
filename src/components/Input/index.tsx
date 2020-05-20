@@ -1,5 +1,11 @@
 import { useField } from '@unform/core';
-import React, { useEffect, useRef, RefObject } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  RefObject,
+  useState,
+  useCallback,
+} from 'react';
 import { TextInputProps, TextInput } from 'react-native';
 import { Container, Icon, TextInputStyled } from './styles';
 
@@ -22,6 +28,18 @@ const Input: React.FC<InputProps> = ({
   const { registerField, defaultValue = '', fieldName, error } = useField(name);
   const inputValueRef = useRef<InputValueReference>({ value: defaultValue });
   const inputElementRef = useRef<TextInput>(null);
+
+  const [isFocused, setIsFocused] = useState(false);
+  const [isFilled, setIsFilled] = useState(false);
+
+  const handleInputFocus = useCallback(() => {
+    setIsFocused(true);
+  }, []);
+
+  const handleInputBlur = useCallback(() => {
+    setIsFocused(false);
+    setIsFilled(!!inputValueRef.current.value);
+  }, []);
 
   useEffect(() => {
     registerField<string>({
@@ -46,13 +64,19 @@ const Input: React.FC<InputProps> = ({
   }, [inputElementRef]);
 
   return (
-    <Container>
-      <Icon name={iconName} size={20} color="#666360" />
+    <Container isFocused={isFocused}>
+      <Icon
+        name={iconName}
+        size={20}
+        color={isFilled ? '#ff9000' : '#666360'}
+      />
       <TextInputStyled
         ref={inputElementRef}
         keyboardAppearance="dark"
         placeholderTextColor="#666360"
         defaultValue={defaultValue}
+        onFocus={handleInputFocus}
+        onBlur={handleInputBlur}
         onChangeText={value => {
           inputValueRef.current.value = value;
         }}
