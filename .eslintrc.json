@@ -1,12 +1,14 @@
 {
   "env": {
-    "es6": true
+    "es6": true,
+    "jest": true
   },
   "extends": [
-    "plugin:react/recommended",
+    "@react-native-community",
     "airbnb",
-    "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint"
+    "prettier",
+    "prettier/@typescript-eslint",
+    "prettier/react"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -26,7 +28,7 @@
     "react/jsx-one-expression-per-line": "off",
     "react/jsx-props-no-spreading": "off",
     "react/prop-types": "off",
-    "react/jsx-filename-extensions": [1, { "extensions": [".tsx"] }],
+    "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "no-unused-expressions": "off",
@@ -38,7 +40,7 @@
     ],
     "@typescript-eslint/explicit-function-return-type": [
       "error",
-      { "allowedExpressions": true }
+      { "allowExpressions": true }
     ]
   },
   "settings": {

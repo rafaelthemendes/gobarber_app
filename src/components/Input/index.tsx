@@ -1,12 +1,12 @@
 import { useField } from '@unform/core';
 import React, {
+  RefObject,
+  useCallback,
   useEffect,
   useRef,
-  RefObject,
   useState,
-  useCallback,
 } from 'react';
-import { TextInputProps, TextInput } from 'react-native';
+import { TextInput, TextInputProps } from 'react-native';
 import { Container, Icon, TextInputStyled } from './styles';
 
 interface InputProps extends TextInputProps {
@@ -25,7 +25,7 @@ const Input: React.FC<InputProps> = ({
   onInputRef,
   ...textInputProps
 }) => {
-  const { registerField, defaultValue = '', fieldName, error } = useField(name);
+  const { registerField, defaultValue = '', fieldName } = useField(name);
   const inputValueRef = useRef<InputValueReference>({ value: defaultValue });
   const inputElementRef = useRef<TextInput>(null);
 
@@ -61,7 +61,7 @@ const Input: React.FC<InputProps> = ({
     if (onInputRef) {
       onInputRef(inputElementRef);
     }
-  }, [inputElementRef]);
+  }, [inputElementRef, onInputRef]);
 
   return (
     <Container isFocused={isFocused}>

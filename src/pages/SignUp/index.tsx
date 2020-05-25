@@ -2,19 +2,16 @@ import { useNavigation } from '@react-navigation/native';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/mobile';
 import React, { useCallback, useRef } from 'react';
-import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  View,
-  TextInput,
-} from 'react-native';
+import { Image, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Feather';
 import { images } from '~/assets';
 import Button from '~/components/Button';
 import Input from '~/components/Input';
+import {
+  KeyboardAvoidingViewStyled,
+  SafeAreaViewStyled,
+} from '~/styles/components';
 import {
   BackToSignInButton,
   BackToSignInButtonText,
@@ -33,11 +30,8 @@ const SignUp: React.FC = () => {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={{ flex: 1 }}
-      >
+    <SafeAreaViewStyled>
+      <KeyboardAvoidingViewStyled>
         <ScrollView keyboardShouldPersistTaps="handled">
           <Container>
             <Image source={images.logo} />
@@ -54,7 +48,9 @@ const SignUp: React.FC = () => {
                 onSubmitEditing={() => emailInputRef.current?.focus()}
               />
               <Input
-                onInputRef={ref => (emailInputRef = ref)}
+                onInputRef={ref => {
+                  emailInputRef = ref;
+                }}
                 autoCorrect={false}
                 autoCapitalize="none"
                 name="email"
@@ -65,7 +61,9 @@ const SignUp: React.FC = () => {
                 onSubmitEditing={() => passwordInputRef.current?.focus()}
               />
               <Input
-                onInputRef={ref => (passwordInputRef = ref)}
+                onInputRef={ref => {
+                  passwordInputRef = ref;
+                }}
                 secureTextEntry
                 name="password"
                 placeholder="Senha"
@@ -83,8 +81,8 @@ const SignUp: React.FC = () => {
           <Icon name="arrow-left" size={20} color="#fff" />
           <BackToSignInButtonText>Voltar para logon</BackToSignInButtonText>
         </BackToSignInButton>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      </KeyboardAvoidingViewStyled>
+    </SafeAreaViewStyled>
   );
 };
 
