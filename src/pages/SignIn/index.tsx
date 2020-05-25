@@ -23,6 +23,7 @@ import {
   Title,
 } from './styles';
 import getValidationErrors from '~/utils/getValidationErrors';
+import { useAuth } from '~/hooks/auth';
 
 interface SignInFormData {
   email: string;
@@ -34,28 +35,34 @@ const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const passwordInputRef = useRef<InputRef>(null);
 
-  const handleSignIn = useCallback(async (data: SignInFormData) => {
-    try {
-      formRef.current?.setErrors({});
+  const { signIn } = useAuth();
 
-      const schema = Yup.object().shape({
-        email: Yup.string()
-          .required('Email obrigatório')
-          .email('Email inválido'),
-        password: Yup.string().required('Senha obrigatória'),
-      });
+  const handleSignIn = useCallback(
+    async (data: SignInFormData) => {
+      try {
+        formRef.current?.setErrors({});
 
-      await schema.validate(data, { abortEarly: false });
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .required('Email obrigatório')
+            .email('Email inválido'),
+          password: Yup.string().required('Senha obrigatória'),
+        });
 
-      // await signIn(data);
-    } catch (error) {
-      if (error instanceof Yup.ValidationError) {
-        const validationErrors = getValidationErrors(error);
-        return formRef.current?.setErrors(validationErrors);
+        await schema.validate(data, { abortEarly: false });
+
+        await signIn(data);
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const validationErrors = getValidationErrors(error);
+          return formRef.current?.setErrors(validationErrors);
+        }
+        console.log(error);
+        Alert.alert('Erro na autenticação', 'Verifique suas credenciais');
       }
-      Alert.alert('Erro na autenticação', 'Verifique suas credenciais');
-    }
-  }, []);
+    },
+    [signIn],
+  );
 
   return (
     <SafeAreaViewStyled>
