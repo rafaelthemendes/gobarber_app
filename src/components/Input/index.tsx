@@ -21,7 +21,7 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
   { name, iconName, ...textInputProps },
   forwardedRef,
 ) => {
-  const { registerField, defaultValue = '', fieldName } = useField(name);
+  const { registerField, defaultValue = '', fieldName, error } = useField(name);
 
   const inputRef = useRef<TextInput>(null);
   const inputValueRef = useRef<{
@@ -34,14 +34,14 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
   useEffect(() => {
     registerField<string>({
       name: fieldName,
-      ref: inputRef.current,
+      ref: inputValueRef.current,
       path: 'value',
-      setValue(ref, value) {
-        ref?.setNativeProps({ text: value });
+      setValue(_, value) {
+        inputRef.current?.setNativeProps({ text: value });
         inputValueRef.current.value = value;
       },
-      clearValue(ref) {
-        ref?.clear();
+      clearValue() {
+        inputRef.current?.clear();
         inputValueRef.current.value = '';
       },
     });
@@ -63,7 +63,7 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
   }, []);
 
   return (
-    <Container isFocused={isFocused}>
+    <Container isFocused={isFocused} hasError={!!error}>
       <Icon
         name={iconName}
         size={20}
